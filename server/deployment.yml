@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tcp-server
+  name: tcp-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tcp-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tcp-server
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - tcp-server
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - image: hicham7farhi/tcp-server:0.1
+        name: tcp-server
+        command: ["go"]
+        args: ["run", "/app/main.go"]
+        ports:
+            - containerPort: 3333
+              protocol: TCP
+              name: tcp
+            - containerPort: 2222
+              protocol: TCP
+              name: metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tcp-server
+  name: tcp-server
+spec:
+  ports:
+  - nodePort: 30171
+    name: tcp
+    port: 3333
+    protocol: TCP
+    targetPort: 3333
+  - nodePort: 30172
+    name: metrics
+    port: 2222
+    protocol: TCP
+    targetPort: 2222
+  selector:
+    app: tcp-server
+  type: NodePort

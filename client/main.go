@@ -9,6 +9,26 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Connection function
+func Connection(config Config) (connection net.Conn, err error){
+  var reserror error
+  for i := 0; i <= 5 ; i++ {
+    // Initiating a connection
+    conn, err := net.Dial("tcp", config.Server)
+    if err != nil {
+      reserror = err
+      if i < 5 {
+      fmt.Println("Cannot obtain connection, retrying ...")
+      time.Sleep(time.Second * 5) 
+      }
+    } else {
+      return conn, nil
+    }
+  }
+  return nil, reserror
+}
+
+
 // This type the server name and port
 type Config struct {
   Server string `mapstructure:"SERVER_ADDRESS"`
@@ -37,9 +57,10 @@ func main(){
     log.Fatal("Connot load config", err)
   }
 
-  conn, err := net.Dial("tcp", config.Server)
+  //conn, err := net.Dial("tcp", config.Server)
+  conn, err := Connection(config)
   if err != nil {
-    fmt.Println(err)
+    log.Fatal("Could not reach server ", err)
   }
 
   //Send data to the server
