@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
+//	"fmt"
 	"log"
 	"net"
 	"time"
-
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +17,7 @@ func Connection(config Config) (connection net.Conn, err error){
     if err != nil {
       reserror = err
       if i < 5 {
-      fmt.Println("Cannot obtain connection, retrying ...")
+      log.Println("Cannot obtain connection, retrying ...")
       time.Sleep(time.Second * 5) 
       }
     } else {
@@ -61,18 +60,21 @@ func main(){
   conn, err := Connection(config)
   if err != nil {
     log.Fatal("Could not reach server ", err)
+  }else {
+    log.Println("Connted to Server !!!")
   }
 
   //Send data to the server
   data := []byte("Hello Server!")
 
-  for { 
+  for {
+  log.Println("Writing Data ...")
   _, err = conn.Write(data)
   if err != nil {
-    fmt.Println("Error: ", err)
-    return
+    log.Println("Error: ", err)
+    panic(0)
   }
-  time.Sleep(time.Second * 20)
+  time.Sleep(time.Second * 10)
 
   defer conn.Close()
   }

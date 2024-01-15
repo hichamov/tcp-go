@@ -28,7 +28,7 @@ spec:
                       - tcp-server
               topologyKey: kubernetes.io/hostname
       containers:
-      - image: hicham7farhi/tcp-server:0.1
+      - image: hicham7farhi/tcp-server:0.2
         name: tcp-server
         command: ["go"]
         args: ["run", "/app/main.go"]

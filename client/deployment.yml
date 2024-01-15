@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tcp-client
+  name: tcp-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tcp-client
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tcp-client
+    spec:
+      restartPolicy: Always
+      containers:
+      - image: hicham7farhi/tcp-client:0.9
+        name: tcp-client
+        command: ["go"]
+        args: ["run", "/app/main.go"]
+        env: 
+            - name: SERVER_ADDRESS
+              value: "192.168.121.12:30171"
