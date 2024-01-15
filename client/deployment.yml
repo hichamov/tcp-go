@@ -25,4 +25,4 @@ spec:
         args: ["run", "/app/main.go"]
         env: 
             - name: SERVER_ADDRESS
-              value: "192.168.121.12:30171"
+              value: "192.168.121.145:30171"
