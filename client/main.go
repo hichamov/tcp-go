@@ -72,7 +72,7 @@ func main(){
   _, err = conn.Write(data)
   if err != nil {
     log.Println("Error: ", err)
-    panic(0)
+    panic("Connection closed !!!")
   }
   time.Sleep(time.Second * 10)
 
